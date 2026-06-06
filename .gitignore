@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Scratch / working files (not part of the site)
+_peek/
+_qa/
+_qa2/
+_logopreview.png
+zrpstudios_youtube-video-links.csv

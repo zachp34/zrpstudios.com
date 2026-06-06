@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home | Zach Purnell</title>
+  <meta name="description" content="Zach Purnell — filmmaker based north of Seattle. Music videos, wedding films, dance & live performance, and brand content." />
+  <meta name="keywords" content="Creative, Imaginative, Innovative, filmmaker, Seattle, music video, wedding film" />
+  <meta property="og:title" content="Home | Zach Purnell" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.zrpstudios.com" />
+  <meta property="og:site_name" content="Zach Purnell" />
+  <link rel="icon" href="images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="intro">
+
+  <span id="top"></span>
+
+  <!-- Directional motion-blur filters (X-only for nav slide, Y-only for logo). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="nav-motion-blur" x="-20%" y="-20%" width="140%" height="140%"
+            color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="0 0" edgeMode="duplicate" />
+    </filter>
+    <filter id="logo-motion-blur" x="-20%" y="-40%" width="140%" height="180%"
+            color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="0 0" edgeMode="duplicate" />
+    </filter>
+  </svg>
+
+  <!-- ===================================================================
+       VVV  YOUR VIDEO LIST  VVV
+       This is the ONLY thing you edit when you finish a new project.
+
+       To ADD a video: copy one line below, paste it at the TOP of the
+       list, and change two things:
+         - id    = the part of the YouTube URL after "watch?v="
+                   (youtube.com/watch?v=I9JPc6Uvjd4  ->  "I9JPc6Uvjd4")
+         - title = whatever you want shown on the thumbnail
+
+       Keep the commas. New videos at the top show first. That's it.
+  ==================================================================== -->
+  <script>
+    const VIDEOS = [
+      { id: "I9JPc6Uvjd4", title: "Zachary Purnell - Cinematography Demo Reel" },
+      { id: "8fkbBsvpmQI", title: "The Home Team - Slow Bloom (Official Music Video)" },
+      { id: "acbnoB6Qtb8", title: "Haley + Josh - Wedding Film" },
+      { id: "CS0T_yPZKq4", title: "INPATHOS - \"Ascension\" (Official Music Video)" },
+      { id: "dFK8N-4NM_4", title: "KingDow - SPOOKED - Music Video (2025)" },
+      { id: "5KLClZD2DjI", title: "INPATHOS - \"Apparitions\" (Official Video)" },
+      { id: "lQiLFiubnI4", title: "DB Stewart - Push My Limit (Official Music Video)" },
+      { id: "q0ScHbuZygg", title: "Emanuel Brown - Call On Me (Official Music Video 2023)" },
+      { id: "yAgvORxeCPs", title: "White Tee" },
+      { id: "0UEPag5GqaE", title: "Designer Disguise - Stardust (Official Music Video)" },
+      { id: "-IZZ4zpfLbA", title: "Vesuvian - On Cursed Sands (OFFICIAL VIDEO)" },
+      { id: "dEc9MiITDsw", title: "TRUTH Live at The North Warehouse in Portland, OR | DUAL REALITY" },
+      { id: "7uShL54YUKY", title: "Pine Box - Wasted (Official Music Video)" },
+      { id: "WJWjKelQIfc", title: "Emanuel Brown - Don't Stop (Official Music Video)" },
+      { id: "Zz3c_-jhCd4", title: "vacuous - substance (guitar playthrough) [4K]" },
+      { id: "WIbbnRVP7Dg", title: "INPATHOS - \"Starless Void\" (Official Video)" },
+      { id: "C67gMO8E1b0", title: "DB Stewart - Gin and Time (Official Music Video)" },
+      { id: "uVCpyQJA0pg", title: "Brenda Powers - Need to Feel Loved" },
+      { id: "6puhS98KQsA", title: "KingDow - Spiritual Eyes (Official Music Video 2022)" },
+      { id: "yCcwlbkbypQ", title: "In My Dreams - Brittany Rogers" },
+      { id: "1P_myZBy4_Q", title: "Chris Sicard - Youth & Sex ft. Belmez Faces" },
+      { id: "bRB8_7gzNxM", title: "KingDow - \"Feminine\" ft. Moia Bri (Official Music Video 2023)" },
+      { id: "q7EezsvWzO0", title: "Pray - KingDow, Sarey Savy, Emanuel Brown (Official Music Video 2022)" },
+      { id: "9VL5RUMzRfY", title: "KingDow - Skeksi (Official Music Video 2022)" },
+      { id: "ioV2KRu4QLk", title: "KingDow - \"Sway\" Official Visualizer" },
+      { id: "rNZMTnZyiNI", title: "KingDow - \"Dark Queen\" (Official Music Video 2021)" },
+      { id: "5z4wCL7Yi0g", title: "KingDow - She My (Official Music Video 2021)" },
+      { id: "hmNhOxroHYI", title: "KingDow - Toucan Woucan (Official Music Video 2021)" },
+      { id: "3cWuc-xiCiE", title: "KingDow - Sky ft. Lake Stovall (Official Music Video 2021)" },
+      { id: "WC_ts8Rli6w", title: "Dot Comet - Break [Official Music Video]" },
+      { id: "Eq31SJvTGCk", title: "Megan + Tyler - Wedding Film [4K]" },
+      { id: "1OVbdmpoSME", title: "KingDow - \"Black Man\" (Official Music Video 2021)" },
+      { id: "Hk4zedrJ7cM", title: "Kinetic - I'm Gone" },
+      { id: "51HJ8onRLQU", title: "Legion of Bass - Event Recap - June 10th 2021" },
+      { id: "id6Ti0iaYMM", title: "Kinetic - Answers (OFFICIAL MUSIC VIDEO)" },
+      { id: "yum6_kXUmjA", title: "Designer Disguise - Diamond in the Rough (Music Video)" },
+      { id: "G-yR9F24BkI", title: "MUSHU - Legion of Bass - June 10th 2021" },
+      { id: "JdaUpHuudxw", title: "Kyra + Tyler - Wedding Film [4K]" },
+      { id: "_IjnhSX1-4k", title: "Kinetic ft. Nik Evans - Keep It Real (OFFICIAL MUSIC VIDEO)" },
+      { id: "8lxV6ga79P4", title: "KingDow - Black Elf/Black Supersaiyan/Dreadlock Bandit (Official Music Video 2020)" },
+      { id: "jE900LTHVtg", title: "KingDow - \"Bond\" official music video" },
+      { id: "ltlug4tDdBo", title: "KingDow - \"Joelle\" Official Music Video 2020" },
+      { id: "W6Usmz7C3pU", title: "Johny Almighty - Bandit Gang" },
+      { id: "5oGqRxTGI2k", title: "KingDow - Pigeon Talk" },
+      { id: "QBozlNZ0nRk", title: "Jauz - Shuffle Shapes" },
+      { id: "mNkU_IFktmE", title: "Dot Comet - Small Head" },
+      { id: "aAyfW0Zzd9Y", title: "Joji - Attention | Mushu Choreography" },
+      { id: "RuNuuiF6JIU", title: "RL Grime - Valhalla (REAPER remix) | Mushu freestyle" },
+      { id: "HSmz28-huEg", title: "Lil Pump - Gucci Gang (GLD & DIABLO remix) | Mushu shuffle" },
+      { id: "WJyhv12_69E", title: "OneTrueGod & DarkkMatter - Don't Ask Me | Mushu Freestyle" },
+      { id: "bdvJVYn4QYM", title: "Kingdow - Dance clip 5" },
+      { id: "Y0LZYt_31pY", title: "KingDow - \"The King freestlye\"" },
+      { id: "Bs89oOKso_o", title: "King - Finesse" },
+      { id: "8JVfHs1UEKg", title: "KingDow - Stay Real" },
+      { id: "5v8bNPqWPLo", title: "Beyond the Woods // Flight (Guitar Playthrough - Ethan Schmidt)" },
+      { id: "LTX12Dorx7Y", title: "Megan Sandico - Bones" },
+      { id: "26M278x2X04", title: "Beyond the Woods // Treehouse Adventures (Live Drum Playthrough - Paul Jaton) [4K]" },
+      { id: "d_BKXELxis4", title: "Sid Law - One Man Band - 4K" },
+      { id: "ZM-L2Gh2bbo", title: "Allen Stone - Unaware (Cover) - Hadiya Al-Shishani (in 4K)" },
+      { id: "f3T0iFTLxRc", title: "KingDow - My Time (Music Video)" },
+      { id: "FtCODw31GOE", title: "JHS - Class of 2015 - Video/Slideshow" },
+      { id: "65u7smpjSCs", title: "Beyond the Woods // Scent of Morning (Live Bass Playthrough - Mitch Baker)" },
+      { id: "BqqCGvCQqCA", title: "Seattle, WA Dental Patient Review - Thank you for my smile." },
+      { id: "Y74oc4oUFb4", title: "Should I Shave or Should I Grow" },
+      { id: "kLmVnmwewAk", title: "DJI Osmo - Kite Boarding" },
+      { id: "LEesplF7l9Y", title: "Jackson News Network - Oso Mudslide" },
+      { id: "BfOm2GurYlA", title: "Zachary Purnell - Texting and Driving PSA" },
+      { id: "ur66wyROhPg", title: "Mavic Pro - Martha Lake Washington - 4K" },
+      { id: "FbJOVtxvzJo", title: "Beyond the Woods - Reset (Song Stream) [4K]" },
+      { id: "U9xKPUxKj30", title: "Kingdow - The Movement (Music Video)" },
+      { id: "vGeVyxJCgVE", title: "EPS - Port Gardener" },
+      { id: "bm3xtvDfn9o", title: "Henry M. Jackson High - Football Season Highlight Video - 2014 Season" },
+      { id: "pn3O53r4i50", title: "Christmas Eve: Dance Cover" },
+    ];
+  </script>
+  <!-- ===================================================================
+       ^^^  END VIDEO LIST  -  nothing below here needs editing  ^^^
+  ==================================================================== -->
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="logo" aria-label="ZRP Studios — Home">
+        <img src="images/logo.png" alt="ZRP Studios" />
+      </a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="navMenu">
+        <ul>
+          <li><a href="#top">Home</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#bio">Bio</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <h1 class="hero-logo"><img src="images/logo.png" alt="ZRP Studios — Zachary R. Purnell" /></h1>
+      <div class="hero-name">&middot;&nbsp; Zachary R. Purnell &nbsp;&middot;</div>
+      <p class="hero-callout">Filmmaker located just north of Seattle<br>
+        Music Videos &middot; Dance Videos &middot; Live Events &middot; Brand &amp; Business Promotion</p>
+    </div>
+  </div>
+
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="section-title intro-line">Portfolio</div>
+      <h2 class="section-subtitle intro-line">Featured Visuals</h2>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="wrap">
+      <div style="text-align:center; margin-top:36px;">
+        <button id="loadMore" class="btn">Load more</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="bio">
+    <div class="wrap">
+      <div class="section-title">Bio</div>
+      <h2 class="section-subtitle">About Me</h2>
+      <div class="bio-grid">
+        <div class="bio-portrait">
+          <img src="images/bio-portrait.jpg" alt="Zach Purnell" loading="lazy" />
+        </div>
+        <div class="bio-text">
+          <p class="greeting">Hello, I'm Zach.</p>
+          <p>I'm a filmmaker based just north of Seattle, specializing in music videos,
+             wedding films, dance &amp; live performance videos, and promotional content
+             for brands and businesses.</p>
+          <p>I hold a degree in Digital Audio Engineering and spent years as a guitarist
+             in an instrumental progressive metal band. By day, I lead a team at
+             Apple, where I've proudly worked for over a decade.</p>
+          <p>I strive to create impactful visual content that helps artists and brands
+             share their stories with the world.</p>
+          <p>Take a look at my portfolio above, and feel free to reach out below &mdash;
+             let's bring your vision to life.</p>
+          <p class="ig">IG: @zachp34</p>
+        </div>
+      </div>
+    </div>
+    <div class="bio-shoots">
+      <img src="images/bio-shoot-1.jpg" alt="On set — TRUTH at The North Warehouse" loading="lazy" />
+      <img src="images/bio-shoot-2.jpg" alt="Live performance shoot" loading="lazy" />
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-title">Contact</div>
+      <h2 class="section-subtitle">Get in touch</h2>
+      <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-row">
+          <div class="field">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="first_name" required />
+          </div>
+          <div class="field">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="last_name" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="socials">
+      <a href="https://www.youtube.com/user/guitarplayerzzz" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/zachp34/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .4 1.4.9.5.4.7.8.9 1.4.1.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.4 1-.9 1.4-.4.5-.8.7-1.4.9-.4.1-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.1-.4-.3-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.4-1 .9-1.4.4-.5.8-.7 1.4-.9.4-.1 1-.3 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1 0-1.7.2-2.1.4-.5.2-.9.4-1.2.8-.4.3-.6.7-.8 1.2-.2.4-.3 1-.4 2.1C2.8 9.8 2.8 10.2 2.8 12s0 2.2.1 3.4c0 1.1.2 1.7.4 2.1.2.5.4.9.8 1.2.3.4.7.6 1.2.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1 0 1.7-.2 2.1-.4.5-.2.9-.4 1.2-.8.4-.3.6-.7.8-1.2.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-3.4s0-2.2-.1-3.4c0-1.1-.2-1.7-.4-2.1a3.2 3.2 0 0 0-.8-1.2 3.2 3.2 0 0 0-1.2-.8c-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8.1a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm6.2-8.3a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>
+      </a>
+      <a href="mailto:zacharypurnell@icloud.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6.5L21 6"/></svg>
+      </a>
+    </div>
+    <div class="copy">&copy;2018 by Zach Purnell</div>
+  </footer>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      <div class="modal-frame" id="modalFrame"></div>
+      <a class="modal-yt" id="modalYT" href="#" target="_blank" rel="noopener">Watch on YouTube &rarr;</a>
+    </div>
+  </div>
+
+  <script>
+    // Start at the very top on load/reload (no restored scroll, no hash jump).
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+    // ---- Intro timeline (see style.css). Starts the reveal, then hands the
+    //      videos over to the scroll observer once everything has played. ----
+    let introDone = false;
+    const introCallbacks = [];
+    function onIntroDone(fn) { introDone ? fn() : introCallbacks.push(fn); }
+    function finishIntro() {
+      if (introDone) return;
+      introDone = true;
+      document.body.classList.remove("intro");
+      introCallbacks.forEach(fn => fn());
+    }
+    // Kick off the CSS timeline on the next frame so initial hidden state paints first.
+    requestAnimationFrame(() => document.body.classList.add("intro-play"));
+
+    // ---- Vertical (directional) motion blur on the hero logo during its move ----
+    (function logoMotionBlur() {
+      const heroLogo = document.querySelector(".hero-logo");
+      const blurNode = document.querySelector("#logo-motion-blur feGaussianBlur");
+      if (!heroLogo || !blurNode) return;
+      const DURATION = 1400 * 0.9;  // finish blur just before the move settles
+      const MAX_BLUR = 10.5;        // peak vertical blur in px (logo is large/fast early on)
+      let raf = null, start = null;
+      function end() {
+        if (raf) cancelAnimationFrame(raf);
+        blurNode.setAttribute("stdDeviation", "0 0");
+        heroLogo.classList.remove("logo-blurring");
+      }
+      function step(now) {
+        if (start === null) start = now;
+        const t = Math.min(1, (now - start) / DURATION);
+        // Velocity is highest at the start (ease-out), so weight the blur toward the
+        // beginning: strong early, tapering to 0 by the end.
+        const amount = Math.pow(1 - t, 1.4) * Math.sin(Math.min(1, t * 3) * Math.PI / 2) * MAX_BLUR;
+        blurNode.setAttribute("stdDeviation", `0 ${amount}`);
+        if (t < 1) raf = requestAnimationFrame(step); else end();
+      }
+      heroLogo.classList.add("logo-blurring");
+      raf = requestAnimationFrame(step);
+    })();
+
+    // ---- Gallery with "Load more" (12 at a time) ----
+    const gallery = document.getElementById("gallery");
+    const loadMoreBtn = document.getElementById("loadMore");
+    const PAGE = 12;
+    let shown = 0;
+
+    function cardHTML(v) {
+      return `
+        <div class="vid" data-id="${v.id}">
+          <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${v.title}" loading="lazy" />
+          <span class="play"></span>
+        </div>`;
+    }
+    // Fade each video in and out as it scrolls into / out of view.
+    const vidObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle("revealed", entry.isIntersecting);
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+
+    // Same scroll-reveal for the three bio images.
+    document.querySelectorAll(".bio-portrait img, .bio-shoots img")
+      .forEach(img => vidObserver.observe(img));
+
+    const LINE_GAP = 0.22; // seconds between portfolio lines during the intro
+
+    function renderNext() {
+      const firstRender = shown === 0;
+      const slice = VIDEOS.slice(shown, shown + PAGE);
+      gallery.insertAdjacentHTML("beforeend", slice.map(cardHTML).join(""));
+      shown += slice.length;
+      if (shown >= VIDEOS.length) loadMoreBtn.style.display = "none";
+      loadMoreBtn.textContent = `Load more (${VIDEOS.length - shown} left)`;
+
+      const newVids = [...gallery.querySelectorAll(".vid:not(.revealed):not(.intro-line)")];
+
+      let introVidLines = 0;
+      if (firstRender && !introDone) {
+        // Continue the intro's line-by-line reveal — but ONLY for rows already on
+        // screen. Off-screen rows keep their hidden state and are left to the scroll
+        // observer, so the normal scroll-based row reveal is untouched.
+        const vh = window.innerHeight;
+        const textLines = document.querySelectorAll("#portfolio .intro-line");
+        let line = textLines.length;           // delay index picks up after title + subtitle
+        let lastTop = null;
+        const introVids = [], scrollVids = [];
+        newVids.forEach(v => {
+          const onScreen = v.getBoundingClientRect().top < vh;
+          if (onScreen) {
+            const top = v.offsetTop;
+            if (lastTop === null || Math.abs(top - lastTop) > 4) { // new row
+              if (lastTop !== null) line++;
+              lastTop = top;
+            }
+            v.classList.add("intro-line");
+            v.style.setProperty("--line-delay", `${line * LINE_GAP}s`);
+            introVids.push(v);
+          } else {
+            scrollVids.push(v);
+          }
+        });
+        introVidLines = lastTop === null ? 0 : (line - textLines.length + 1);
+        // Restamp the text lines so the whole sequence is evenly spaced.
+        textLines.forEach((el, i) => el.style.setProperty("--line-delay", `${i * LINE_GAP}s`));
+        // After the intro, hand the on-screen videos to the scroll observer too.
+        onIntroDone(() => introVids.forEach(v => {
+          v.classList.remove("intro-line");
+          v.style.removeProperty("--line-delay");
+          v.classList.add("revealed");           // already shown; keep them visible
+          vidObserver.observe(v);
+        }));
+        // Off-screen videos behave normally right away.
+        scrollVids.forEach(v => vidObserver.observe(v));
+      } else {
+        newVids.forEach(v => vidObserver.observe(v));
+      }
+      return introVidLines;
+    }
+    const firstIntroVidLines = renderNext();
+    loadMoreBtn.addEventListener("click", renderNext);
+
+    // End the intro after the logo move + the on-screen portfolio lines have played.
+    (function scheduleIntroEnd() {
+      const textLines = document.querySelectorAll("#portfolio .intro-line:not(.vid)").length;
+      const totalLines = textLines + firstIntroVidLines;
+      // portfolio starts at 1.1s; last line begins at 1.1 + (n-1)*GAP, +0.938s to finish.
+      const endMs = (1.1 + Math.max(0, totalLines - 1) * LINE_GAP + 0.938) * 1000;
+      setTimeout(finishIntro, endMs + 100);
+    })();
+
+    // ---- Modal player ----
+    const modal = document.getElementById("modal");
+    const frame = document.getElementById("modalFrame");
+    const ytLink = document.getElementById("modalYT");
+    function openVideo(id) {
+      // Use the privacy-enhanced domain and pass an explicit origin so YouTube's
+      // embed origin check passes (prevents the "Error 153" config error).
+      const origin = encodeURIComponent(window.location.origin);
+      const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&origin=${origin}`;
+      frame.innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      ytLink.href = `https://www.youtube.com/watch?v=${id}`;
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeVideo() {
+      modal.classList.remove("open");
+      frame.innerHTML = "";
+      document.body.style.overflow = "";
+    }
+    gallery.addEventListener("click", e => {
+      const card = e.target.closest(".vid");
+      if (card) openVideo(card.dataset.id);
+    });
+    document.getElementById("modalClose").addEventListener("click", closeVideo);
+    modal.addEventListener("click", e => { if (e.target === modal) closeVideo(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeVideo(); });
+
+    // ---- Toggle nav logo once hero logo passes under the nav; CSS owns the 0.8s fade ----
+    const navLogo = document.querySelector(".nav .logo");
+    const heroLogo = document.querySelector(".hero-logo");
+    const navMenuEl = document.querySelector(".nav nav");
+    const blurNode = document.querySelector("#nav-motion-blur feGaussianBlur");
+
+    // Ramp a horizontal (directional) SVG blur up then down over the slide.
+    let blurRAF = null;
+    function endMotionBlur() {
+      if (blurRAF) { cancelAnimationFrame(blurRAF); blurRAF = null; }
+      if (blurNode) blurNode.setAttribute("stdDeviation", "0 0");
+      if (navMenuEl) navMenuEl.classList.remove("sliding"); // drops the filter entirely
+    }
+    function playMotionBlur() {
+      if (!navMenuEl || !blurNode) return;
+      // Finish the blur before the slide fully settles so no blur is visible at rest.
+      const DURATION = 800 * 0.85;   // ramp completes at 85% of the 0.8s slide
+      const MAX_BLUR = 3;            // peak horizontal blur in px
+      const start = performance.now();
+      navMenuEl.classList.add("sliding");
+      if (blurRAF) cancelAnimationFrame(blurRAF);
+      function step(now) {
+        const t = Math.min(1, (now - start) / DURATION);
+        // bell curve: 0 at ends, 1 at midpoint (fastest motion)
+        const amount = Math.sin(t * Math.PI) * MAX_BLUR;
+        blurNode.setAttribute("stdDeviation", `${amount} 0`);
+        if (t < 1) {
+          blurRAF = requestAnimationFrame(step);
+        } else {
+          endMotionBlur();
+        }
+      }
+      blurRAF = requestAnimationFrame(step);
+    }
+    // Safety net: if the transform finishes, guarantee the blur is cleared.
+    if (navMenuEl) {
+      navMenuEl.addEventListener("transitionend", e => {
+        if (e.propertyName === "transform") endMotionBlur();
+      });
+    }
+
+    if (navLogo && heroLogo) {
+      const NAV_H = 68;        // sticky nav height
+      let ticking = false;
+      let lastVisible = null;
+      function updateLogo() {
+        const heroBottom = heroLogo.getBoundingClientRect().bottom;
+        // visible once the hero logo's bottom has scrolled above the nav bar
+        const isVisible = heroBottom <= NAV_H;
+        navLogo.classList.toggle("visible", isVisible);
+        if (lastVisible !== null && isVisible !== lastVisible) playMotionBlur();
+        lastVisible = isVisible;
+        ticking = false;
+      }
+      function onScroll() {
+        if (!ticking) { requestAnimationFrame(updateLogo); ticking = true; }
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      updateLogo();
+    }
+
+    // ---- Shift the (right-aligned) menu so its center aligns with the viewport center ----
+    // Uses offsetWidth/offsetLeft (transform-independent), so it never disturbs the
+    // live slide transition.
+    const navMenu = document.querySelector(".nav nav");
+    const navInnerEl = document.querySelector(".nav-inner");
+    function updateNavCenter() {
+      if (!navMenu || !navInnerEl) return;
+      // Menu's natural (untransformed) left within nav-inner + its width give its
+      // resting center; shift so that center sits at the viewport center.
+      const innerRect = navInnerEl.getBoundingClientRect();
+      const menuRestLeft = innerRect.left + navMenu.offsetLeft; // offsetLeft ignores transform
+      const menuCenter = menuRestLeft + navMenu.offsetWidth / 2;
+      const pageCenter = window.innerWidth / 2;
+      navMenu.style.setProperty("--nav-center", `${pageCenter - menuCenter}px`);
+    }
+    function scheduleNavCenter() { requestAnimationFrame(updateNavCenter); }
+
+    // ---- Collapse the menu to a hamburger only when it would overlap the logo ----
+    const navToggle = document.querySelector(".nav-toggle");
+    const navLogoEl = document.querySelector(".nav .logo");
+    const GAP = 24; // required clearance between logo and menu (matches the side padding)
+
+    function updateNavLayout() {
+      if (!navMenu || !navInnerEl || !navLogoEl) return;
+      const wasCollapsed = document.body.classList.contains("nav-collapsed");
+      // Measure in the EXPANDED inline layout so we know the menu's natural width.
+      document.body.classList.remove("nav-collapsed");
+      const innerRect = navInnerEl.getBoundingClientRect();
+      const logoRight = navLogoEl.offsetLeft + navLogoEl.offsetWidth;        // px from inner left
+      const menuLeft  = navMenu.offsetLeft;                                  // right-aligned menu's left
+      const overlaps  = (logoRight + GAP) > menuLeft;
+      document.body.classList.toggle("nav-collapsed", overlaps);
+      if (!overlaps) {
+        document.body.classList.remove("nav-open");
+        navToggle && navToggle.setAttribute("aria-expanded", "false");
+      } else if (wasCollapsed) {
+        // keep prior collapsed state; nothing to restore
+      }
+      updateNavCenter();
+    }
+    function scheduleNavLayout() { requestAnimationFrame(updateNavLayout); }
+
+    // Hamburger open/close
+    if (navToggle) {
+      navToggle.addEventListener("click", () => {
+        const open = document.body.classList.toggle("nav-open");
+        navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      // Close after picking a menu item, or clicking outside.
+      navMenu.addEventListener("click", e => {
+        if (e.target.closest("a")) {
+          document.body.classList.remove("nav-open");
+          navToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("click", e => {
+        if (document.body.classList.contains("nav-open") &&
+            !e.target.closest(".nav-inner")) {
+          document.body.classList.remove("nav-open");
+          navToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    scheduleNavLayout();
+    window.addEventListener("resize", scheduleNavLayout, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleNavLayout);
+  </script>
+
+</body>
+</html>
