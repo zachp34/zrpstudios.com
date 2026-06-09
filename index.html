@@ -300,9 +300,10 @@
       raf = requestAnimationFrame(step);
     })();
 
-    // ---- Gallery with "Load more" (12 at a time) ----
+    // ---- Gallery with "Load more" (24 first, then 12 per click) ----
     const gallery = document.getElementById("gallery");
     const loadMoreBtn = document.getElementById("loadMore");
+    const FIRST_PAGE = 24;
     const PAGE = 12;
     let shown = 0;
 
@@ -344,7 +345,7 @@
 
     function renderNext() {
       const firstRender = shown === 0;
-      const slice = VIDEOS.slice(shown, shown + PAGE);
+      const slice = VIDEOS.slice(shown, shown + (firstRender ? FIRST_PAGE : PAGE));
       gallery.insertAdjacentHTML("beforeend", slice.map(cardHTML).join(""));
       shown += slice.length;
       if (shown >= VIDEOS.length) loadMoreBtn.style.display = "none";
