@@ -309,14 +309,30 @@
     function cardHTML(v) {
       return `
         <div class="vid" data-id="${v.id}">
-          <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${v.title}" loading="lazy" />
+          <img src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg" alt="${v.title}" loading="lazy"
+               onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg';"
+               onload="if(this.naturalWidth<=120){this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg';}" />
           <span class="play"></span>
         </div>`;
     }
     // Fade each video in and out as it scrolls into / out of view.
+    const COL_STAGGER = 0.08; // seconds of delay per column, left-to-right
     const vidObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        entry.target.classList.toggle("revealed", entry.isIntersecting);
+        const el = entry.target;
+        if (entry.isIntersecting) {
+          // Stagger by column position so each row cascades in left-to-right.
+          if (el.classList.contains("vid")) {
+            const left = el.offsetLeft;
+            const w = el.offsetWidth + 18; // card width + grid gap
+            const col = w ? Math.round(left / w) : 0;
+            el.style.setProperty("--reveal-delay", `${col * COL_STAGGER}s`);
+          }
+          el.classList.add("revealed");
+        } else {
+          el.classList.remove("revealed");
+          el.style.removeProperty("--reveal-delay");
+        }
       });
     }, { rootMargin: "0px 0px -8% 0px" });
 
@@ -406,8 +422,8 @@
     }
     function closeVideo() {
       modal.classList.remove("open");
-      frame.innerHTML = "";
       document.body.style.overflow = "";
+      setTimeout(() => { frame.innerHTML = ""; }, 400);
     }
     gallery.addEventListener("click", e => {
       const card = e.target.closest(".vid");
