@@ -228,7 +228,7 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" required></textarea>
         </div>
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAADh2AWk7y8OK3mU7" data-theme="dark"></div>
+        <div id="tsContainer"></div>
         <button type="submit" class="btn">Submit</button>
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
@@ -567,32 +567,40 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleNavLayout);
 
     // ---- Contact form: AJAX submit to Formspree, inline status (no page leave) ----
-    // Turnstile (visible Managed widget) sits in the form; its token rides along
-    // in FormData on a normal submit. No callback-driven sending (that loops in
-    // Managed mode, which auto-issues tokens).
+    // Turnstile checkbox stays absent until the visitor first clicks Submit. We do
+    // NOT render the Managed widget on page load (it would auto-issue a token and,
+    // if a callback sent the form, loop). Render is deferred to the first Submit
+    // click; the callback sends ONLY when pendingSubmit is true (a real attempt).
     const contactForm = document.getElementById("contactForm");
     const formStatus = document.getElementById("formStatus");
     if (contactForm && formStatus) {
       const btn = contactForm.querySelector("button[type=submit]");
+      const tsContainer = document.getElementById("tsContainer");
       const originalBtnText = btn.textContent;
+      let tsWidgetId = null;     // null until first Submit click
+      let pendingSubmit = false; // true while waiting on a user-driven verification
 
-      contactForm.addEventListener("submit", async e => {
-        e.preventDefault();
-        btn.disabled = true;
-        btn.textContent = "Sending…";
+      function setBusy(busy) {
+        btn.disabled = busy;
+        btn.textContent = busy ? "Sending…" : originalBtnText;
+      }
+
+      async function doSend() {
+        setBusy(true);
         formStatus.className = "form-status";
         formStatus.textContent = "";
         try {
           const res = await fetch(contactForm.action, {
             method: "POST",
-            body: new FormData(contactForm),
+            body: new FormData(contactForm),     // includes cf-turnstile-response
             headers: { Accept: "application/json" }
           });
           if (res.ok) {
             contactForm.reset();
             formStatus.classList.add("ok");
             formStatus.textContent = "Thanks — your message has been sent.";
-            if (window.turnstile) turnstile.reset();   // re-arm widget for next time
+            tsContainer.classList.remove("show");   // hide checkbox again
+            if (window.turnstile && tsWidgetId !== null) turnstile.reset(tsWidgetId);
           } else {
             const data = await res.json().catch(() => ({}));
             formStatus.classList.add("err");
@@ -604,8 +612,50 @@
           formStatus.classList.add("err");
           formStatus.textContent = "Network error. Please try again.";
         } finally {
-          btn.disabled = false;
-          btn.textContent = originalBtnText;
+          setBusy(false);
+        }
+      }
+
+      contactForm.addEventListener("submit", e => {
+        e.preventDefault();
+
+        // Turnstile script blocked/unavailable: just send (don't trap the visitor).
+        if (!window.turnstile) { doSend(); return; }
+
+        // First Submit click: render + reveal the checkbox, then wait for the user.
+        if (tsWidgetId === null) {
+          pendingSubmit = true;
+          tsContainer.classList.add("show");
+          formStatus.className = "form-status";
+          formStatus.textContent = "Please verify you're human below to send.";
+          tsWidgetId = turnstile.render("#tsContainer", {
+            sitekey: "0x4AAAAAADh2AWk7y8OK3mU7",
+            theme: "dark",
+            callback: () => {
+              // Only send if this came from a real submit attempt.
+              if (pendingSubmit) { pendingSubmit = false; doSend(); }
+            },
+            "expired-callback": () => { if (window.turnstile) turnstile.reset(tsWidgetId); },
+            "error-callback": () => {
+              pendingSubmit = false;
+              formStatus.className = "form-status err";
+              formStatus.textContent = "Verification failed. Please try again.";
+            }
+          });
+          tsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          return;
+        }
+
+        // Widget already exists. If already verified, send; else re-arm and wait.
+        const token = (contactForm.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (token) {
+          doSend();
+        } else {
+          pendingSubmit = true;
+          formStatus.className = "form-status";
+          formStatus.textContent = "Please verify you're human below to send.";
+          tsContainer.classList.add("show");
+          tsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
       });
     }

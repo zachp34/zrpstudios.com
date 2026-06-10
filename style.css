@@ -529,8 +529,21 @@ section { padding: 72px 0; }
 .form-status.ok  { color: var(--accent-hi); }
 .form-status.err { color: #e06b6b; }
 
-/* Turnstile widget: space it to sit naturally above the Submit button */
-.cf-turnstile { margin: 4px 0 18px; }
+/* Turnstile: absent until first Submit, then fades/slides in to match the form */
+#tsContainer {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  margin: 0;
+  transition: max-height 0.45s ease, opacity 0.35s ease, transform 0.35s ease, margin 0.45s ease;
+}
+#tsContainer.show {
+  max-height: 90px;
+  opacity: 1;
+  transform: translateY(0);
+  margin: 0 0 18px;
+}
 
 /* ---------- Footer ---------- */
 footer {
