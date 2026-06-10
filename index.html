@@ -228,7 +228,7 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" required></textarea>
         </div>
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAADh2AWk7y8OK3mU7" data-theme="dark"></div>
+        <div id="tsContainer"></div>
         <button type="submit" class="btn">Submit</button>
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
@@ -567,15 +567,24 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleNavLayout);
 
     // ---- Contact form: AJAX submit to Formspree, inline status (no page leave) ----
+    // Turnstile (Managed widget) stays hidden until the visitor first clicks Submit.
+    // First click reveals the checkbox; once it returns a token the form auto-sends.
     const contactForm = document.getElementById("contactForm");
     const formStatus = document.getElementById("formStatus");
     if (contactForm && formStatus) {
-      contactForm.addEventListener("submit", async e => {
-        e.preventDefault();
-        const btn = contactForm.querySelector("button[type=submit]");
-        const original = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = "Sending…";
+      const btn = contactForm.querySelector("button[type=submit]");
+      const tsContainer = document.getElementById("tsContainer");
+      const originalBtnText = btn.textContent;
+      let tsWidgetId = null;
+      let tsRevealed = false;
+
+      function setBusy(busy) {
+        btn.disabled = busy;
+        btn.textContent = busy ? "Sending…" : originalBtnText;
+      }
+
+      async function sendForm() {
+        setBusy(true);
         formStatus.className = "form-status";
         formStatus.textContent = "";
         try {
@@ -588,6 +597,10 @@
             contactForm.reset();
             formStatus.classList.add("ok");
             formStatus.textContent = "Thanks — your message has been sent.";
+            // hide + reset the widget again for any subsequent message
+            tsContainer.classList.remove("show");
+            tsRevealed = false;
+            if (window.turnstile && tsWidgetId !== null) turnstile.reset(tsWidgetId);
           } else {
             const data = await res.json().catch(() => ({}));
             formStatus.classList.add("err");
@@ -599,9 +612,39 @@
           formStatus.classList.add("err");
           formStatus.textContent = "Network error. Please try again.";
         } finally {
-          btn.disabled = false;
-          btn.textContent = original;
+          setBusy(false);
         }
+      }
+
+      // Render the Managed widget (hidden via CSS) as soon as the script is ready.
+      function renderTurnstile() {
+        if (!window.turnstile) { setTimeout(renderTurnstile, 150); return; }
+        tsWidgetId = turnstile.render("#tsContainer", {
+          sitekey: "0x4AAAAAADh2AWk7y8OK3mU7",
+          theme: "dark",
+          callback: () => sendForm(),          // token received -> send
+          "error-callback": () => {
+            formStatus.className = "form-status err";
+            formStatus.textContent = "Verification failed. Please try again.";
+          }
+        });
+      }
+      renderTurnstile();
+
+      contactForm.addEventListener("submit", e => {
+        e.preventDefault();
+        // First submit: reveal the checkbox and ask the visitor to verify.
+        if (!tsRevealed) {
+          tsRevealed = true;
+          tsContainer.classList.add("show");
+          formStatus.className = "form-status";
+          formStatus.textContent = "Please verify you're human below to send.";
+          tsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          return;
+        }
+        // Turnstile unavailable (script blocked): send anyway rather than trap them.
+        if (!window.turnstile) sendForm();
+        // Otherwise sending is driven by the Turnstile callback once checked.
       });
     }
   </script>
