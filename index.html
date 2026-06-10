@@ -586,23 +586,44 @@
         btn.textContent = busy ? "Sending…" : originalBtnText;
       }
 
+      // Build the POST body explicitly from current field values + the Turnstile
+      // token. Snapshotting here (synchronously, before any await) guarantees we
+      // never post a form that was reset out from under us by a stray callback.
+      function buildBody() {
+        const fd = new FormData();
+        fd.append("first_name", document.getElementById("fname").value);
+        fd.append("last_name",  document.getElementById("lname").value);
+        fd.append("email",      document.getElementById("email").value);
+        fd.append("subject",    document.getElementById("subject").value);
+        fd.append("message",    document.getElementById("message").value);
+        const tok = (contactForm.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (tok) fd.append("cf-turnstile-response", tok);
+        return fd;
+      }
+
       async function doSend() {
+        // Final guards: real attempt, valid fields. Stops blank/stray sends cold.
+        if (!pendingSubmit) return;
+        if (!contactForm.checkValidity()) { pendingSubmit = false; return; }
+        pendingSubmit = false;
+
+        const body = buildBody();              // snapshot NOW, before awaiting
         setBusy(true);
         formStatus.className = "form-status";
         formStatus.textContent = "";
         try {
           const res = await fetch(contactForm.action, {
             method: "POST",
-            body: new FormData(contactForm),     // includes cf-turnstile-response
+            body,
             headers: { Accept: "application/json" }
           });
           if (res.ok) {
             contactForm.reset();
             formStatus.classList.add("ok");
             formStatus.textContent = "Thanks — your message has been sent.";
-            tsContainer.classList.remove("show");   // hide checkbox again
+            tsContainer.classList.remove("show");
             if (window.turnstile && tsWidgetId !== null) turnstile.reset(tsWidgetId);
-            // Briefly flip the button label to "Submitted", then restore it.
+            btn.disabled = false;
             btn.textContent = "Submitted";
             setTimeout(() => { btn.textContent = originalBtnText; }, 3000);
           } else {
@@ -611,28 +632,27 @@
             formStatus.textContent =
               (data.errors && data.errors.map(x => x.message).join(", ")) ||
               "Something went wrong. Please try again.";
+            setBusy(false);
           }
         } catch (_) {
           formStatus.classList.add("err");
           formStatus.textContent = "Network error. Please try again.";
-        } finally {
-          btn.disabled = false;   // don't clobber the "Submitted" label set above
+          setBusy(false);
         }
       }
 
       contactForm.addEventListener("submit", e => {
         e.preventDefault();
 
-        // Guard: never send unless required fields are filled. This is what stops
-        // a passive Turnstile auto-verify from posting a blank form.
+        // Never proceed unless required fields are filled.
         if (!contactForm.checkValidity()) {
           pendingSubmit = false;
           contactForm.reportValidity();
           return;
         }
 
-        // Turnstile script blocked/unavailable: just send (don't trap the visitor).
-        if (!window.turnstile) { doSend(); return; }
+        // Turnstile unavailable: send directly.
+        if (!window.turnstile) { pendingSubmit = true; doSend(); return; }
 
         // First Submit click: render + reveal the checkbox, then wait for the user.
         if (tsWidgetId === null) {
@@ -641,14 +661,7 @@
           tsWidgetId = turnstile.render("#tsContainer", {
             sitekey: "0x4AAAAAADh2AWk7y8OK3mU7",
             theme: "dark",
-            callback: () => {
-              // Send only on a real submit attempt AND with the form still valid.
-              if (pendingSubmit && contactForm.checkValidity()) {
-                pendingSubmit = false;
-                doSend();
-              }
-            },
-            "expired-callback": () => { if (window.turnstile) turnstile.reset(tsWidgetId); },
+            callback: () => doSend(),   // doSend() self-guards on pendingSubmit + validity
             "error-callback": () => {
               pendingSubmit = false;
               formStatus.className = "form-status err";
@@ -659,12 +672,12 @@
           return;
         }
 
-        // Widget already exists. If already verified, send; else re-arm and wait.
+        // Widget already rendered: this click is a real attempt.
+        pendingSubmit = true;
         const token = (contactForm.querySelector('[name="cf-turnstile-response"]') || {}).value;
         if (token) {
           doSend();
         } else {
-          pendingSubmit = true;
           tsContainer.classList.add("show");
           tsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
