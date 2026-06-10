@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="intro">
 
@@ -227,6 +228,7 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" required></textarea>
         </div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADh2AWk7y8OK3mU7" data-theme="dark"></div>
         <button type="submit" class="btn">Submit</button>
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
