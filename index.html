@@ -567,10 +567,11 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleNavLayout);
 
     // ---- Contact form: AJAX submit to Formspree, inline status (no page leave) ----
-    // Turnstile checkbox stays absent until the visitor first clicks Submit. We do
-    // NOT render the Managed widget on page load (it would auto-issue a token and,
-    // if a callback sent the form, loop). Render is deferred to the first Submit
-    // click; the callback sends ONLY when pendingSubmit is true (a real attempt).
+    // Turnstile checkbox stays absent until the visitor first clicks Submit. The
+    // Managed widget is not rendered on load (it auto-issues a token, which would
+    // loop if a callback sent the form). Render is deferred to the first Submit
+    // click. Every send path is gated on checkValidity() so a passive auto-verify
+    // can never fire a BLANK submission.
     const contactForm = document.getElementById("contactForm");
     const formStatus = document.getElementById("formStatus");
     if (contactForm && formStatus) {
@@ -601,6 +602,9 @@
             formStatus.textContent = "Thanks — your message has been sent.";
             tsContainer.classList.remove("show");   // hide checkbox again
             if (window.turnstile && tsWidgetId !== null) turnstile.reset(tsWidgetId);
+            // Briefly flip the button label to "Submitted", then restore it.
+            btn.textContent = "Submitted";
+            setTimeout(() => { btn.textContent = originalBtnText; }, 3000);
           } else {
             const data = await res.json().catch(() => ({}));
             formStatus.classList.add("err");
@@ -612,12 +616,20 @@
           formStatus.classList.add("err");
           formStatus.textContent = "Network error. Please try again.";
         } finally {
-          setBusy(false);
+          btn.disabled = false;   // don't clobber the "Submitted" label set above
         }
       }
 
       contactForm.addEventListener("submit", e => {
         e.preventDefault();
+
+        // Guard: never send unless required fields are filled. This is what stops
+        // a passive Turnstile auto-verify from posting a blank form.
+        if (!contactForm.checkValidity()) {
+          pendingSubmit = false;
+          contactForm.reportValidity();
+          return;
+        }
 
         // Turnstile script blocked/unavailable: just send (don't trap the visitor).
         if (!window.turnstile) { doSend(); return; }
@@ -626,14 +638,15 @@
         if (tsWidgetId === null) {
           pendingSubmit = true;
           tsContainer.classList.add("show");
-          formStatus.className = "form-status";
-          formStatus.textContent = "Please verify you're human below to send.";
           tsWidgetId = turnstile.render("#tsContainer", {
             sitekey: "0x4AAAAAADh2AWk7y8OK3mU7",
             theme: "dark",
             callback: () => {
-              // Only send if this came from a real submit attempt.
-              if (pendingSubmit) { pendingSubmit = false; doSend(); }
+              // Send only on a real submit attempt AND with the form still valid.
+              if (pendingSubmit && contactForm.checkValidity()) {
+                pendingSubmit = false;
+                doSend();
+              }
             },
             "expired-callback": () => { if (window.turnstile) turnstile.reset(tsWidgetId); },
             "error-callback": () => {
@@ -652,8 +665,6 @@
           doSend();
         } else {
           pendingSubmit = true;
-          formStatus.className = "form-status";
-          formStatus.textContent = "Please verify you're human below to send.";
           tsContainer.classList.add("show");
           tsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
